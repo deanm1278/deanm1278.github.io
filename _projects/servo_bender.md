@@ -52,10 +52,10 @@ To get the required positional feedback from the motors an encoder assembly need
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\chief-2207-2050kv-motors-v2.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/chief-2207-2050kv-motors-v2.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\servo_exploded.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/servo_exploded.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -70,7 +70,7 @@ The Lever assembly was designed around off-the-shelf hardware where possible and
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\lever_exploded.png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/lever_exploded.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -79,7 +79,7 @@ The Lever assembly was designed around off-the-shelf hardware where possible and
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\bender3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/bender3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -90,10 +90,10 @@ The chassis to house the mechanical components was 3D printed out of a nylon mat
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\Screenshot (155).png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/Screenshot (155).png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\Screenshot (156).png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/Screenshot (156).png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -106,10 +106,10 @@ The pedal assembly was designed around 4 modified piano sustain pedals. A magnet
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\IMG_9131.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/IMG_9131.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\IMG_9181.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/IMG_9181.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -122,7 +122,7 @@ Each servo requires 3 Half-H-Bridges. A three-phase BLDC gate driver IC was used
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\powerStage.png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/powerStage.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -133,7 +133,7 @@ As mentioned earlier, driving the motors quietly and efficiently while being abl
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\TMC4671.png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/TMC4671.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -144,13 +144,13 @@ Since the TMC4671 is doing most of the heavy lifting for the motor control only 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\quadServo.png" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/quadServo.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets\img\IMG_1733.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/IMG_1733.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
