@@ -140,7 +140,7 @@ As mentioned earlier, driving the motors quietly and efficiently while being abl
     simplified block diagram of the TMC4671
 </div>
 
-Since the TMC4671 is doing most of the heavy lifting for the motor control only a basic STM32 ARM Cortex M0+ microcontroller is needed to run the rest of the firmware tasks. For wireless communication with the pedal assembly, NRF24L01+ radio modules are used. These radio modules are cheap and simple with plenty of existing documentation. All of the rest of this circuitry goes on another PCB. The guitar circuitry is powered by a 3S Lipo battery. It's important to have a sufficiently low impedance path directly from the battery to each motor power stage, as theses motors can draw many amps of current. Without this low impedance path, voltage drops that occur when a motor suddenly turns on will wreak havoc on noise-sensitive components in the circuit like the radio module.
+Since the TMC4671 is doing most of the heavy lifting for the motor control only a basic STM32 ARM Cortex M0+ microcontroller is needed to run the rest of the firmware tasks. For wireless communication with the pedal assembly, NRF24L01+ radio modules are used. These radio modules are cheap and simple with plenty of existing documentation. All of the rest of this circuitry goes on another PCB. The guitar circuitry is powered by a 3S Lipo battery. It's important to have a sufficiently low impedance path directly from the battery to each motor power stage as theses motors can draw many amps of current. Without this low impedance path, voltage drops that occur when a motor suddenly turns on will wreak havoc on noise-sensitive components in the circuit like the radio module.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
