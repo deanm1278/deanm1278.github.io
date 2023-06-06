@@ -22,17 +22,17 @@ The criteria for this design were:
  - be able to change the tuning quickly and quietly so as not to interrupt the music
  - be battery powered
 
-Here are some video demos of the design in action. For the non-musician: pay attention to the pitch changes of the notes at the times when the pedals are pressed or released.
+Here are some video demos of the design in action. If you're unsure what exactly it's doing try paying attention to the pitch changes of the notes at the times when the pedals are pressed or released.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        <iframe width="770" height="480" src="https://www.youtube.com/embed/OuNCbN86QOk" title="Electronic string bender guitar demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="100%" height="480" src="https://www.youtube.com/embed/OuNCbN86QOk" title="Electronic string bender guitar demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        <iframe width="770" height="480" src="https://www.youtube.com/embed/Mp2r41Q7cyQ" title="Lulu swing (servo motor bender guitar demo)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="100%" height="480" src="https://www.youtube.com/embed/Mp2r41Q7cyQ" title="Lulu swing (servo motor bender guitar demo)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 </div>
 
