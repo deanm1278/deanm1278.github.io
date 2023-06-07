@@ -47,7 +47,7 @@ The block diagram in vivado is (open the image in a new tab to see it larger):
     </div>
 </div>
 
-Essentially we have a custom AXI Stream verilog module called `ledstream_0` in the design that takes a stream of data provided by `axi_dma_1`. The design also includes another axi DMA IP to get data from the I2S IP that communicates with the codec on the dev board.
+Essentially we have a custom AXI Stream verilog module called `ledstream_0` in the design that takes a stream of data provided by `axi_dma_1`. The design also includes another AXI DMA IP to get data from the I2S IP that communicates with the codec on the dev board.
 
 The ARM processor sets up the DMAs to read circularly linked descriptors from BRAM in the FPGA fabric. When new audio data is available an interrupt is fired, and the data is processed. The filled framebuffers are setup to DMA out to the LED controller peripheral that writes all channels in parallel.
 
