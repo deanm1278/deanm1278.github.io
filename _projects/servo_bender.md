@@ -6,6 +6,7 @@ img: assets/img/bender_cover.jpg
 importance: 3
 category: fun
 ---
+#### 2022
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
@@ -36,7 +37,7 @@ Here are some video demos of the design in action. If you're unsure what exactly
     </div>
 </div>
 
-This is a very impractical thing, but I like the way it sounds and there are a number of qualities about it that attracted me to it as an interesting and challenging engineering project. I'll explain the design and where the challenges stem from.
+A device like this would be impractical to produce as a commercial product and it is not intended as such. However, I like the way it sounds and there are a number of qualities about it that attracted me to it as an interesting and challenging engineering project. I'll explain the design and where the challenges stem from.
 
 ## Choice of Motors
 
@@ -163,3 +164,7 @@ One of the challenging aspects of this project is the elimination of electromagn
  - place the motors as far from the pickups as possible
  - reduce the load on the motors as much as possible with mechanical counterbalancing. More current through the motors creates a stronger magnetic field
  - use a MuMETAL shield around the motors
+
+## Conclusion
+
+The ability to bend four of your guitar strings and to quickly and seamlessly change tunings with foot pedals makes it possible for this device to achieve sounds you can't really get from any other instrument. I look forward to facing the challenge of becoming more proficient at playing it in the future, and to further improving on the design.
