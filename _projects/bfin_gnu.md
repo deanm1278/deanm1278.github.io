@@ -30,7 +30,7 @@ Here are some videos of projects that I used my toolchain to make:
 
 ## GCC Support
 
-ADI previously supported a GCC toolchain for their Blackfin processors, but it was abandoned long before the Blackfin+ processors came about. Since the Blackfin+ instruction set is a superset of the original Blackfin instruction set, this seemed like a great place to start. GCC is massive and even being able to configure and build it from source is difficult. I will leave the details of the compiler modification for another possible writeup in the future and instead will just point to my GCC fork below for those interested in looking through the commits to see what needs to be done for this type of thing:
+ADI previously supported a GCC toolchain for their Blackfin processors, but it was abandoned long before the Blackfin+ processors came about. Since the Blackfin+ instruction set is a superset of the original Blackfin instruction set, this ADI GCC fork seemed like a great place to start. GCC is massive and even being able to configure and build it from source is difficult. I will leave the details of the compiler modification for another possible writeup in the future and instead will just point to my GCC fork below for those interested in looking through the commits to see what needs to be done for this type of thing:
 
 <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
   {% include repository/repo.html repository="deanm1278/blackfin-plus-gnu" %}
@@ -71,7 +71,7 @@ The exported data can then be imported into Python for analysis. At this point e
     export the captured debugger trace
 </div>
 
-Since the goal is to understand what the debug probe is doing enough to reimplement everything on our own, the data in it's current form is useless. To further clean the data we can re-implement the JTAG state machine in python and loop through the rows, grouping them into operations. This leaves us with 32 operations for our simplest case single word read.
+Since the goal is to understand what the debug probe is doing enough to reimplement everything on our own, the data in it's current form is useless. To clean the data up a bit we can re-implement the JTAG state machine in python and loop through the rows, grouping them into operations. This leaves us with 32 operations for our simplest case single word read.
 
 In order to better understand what's going on we can also try to import and parse out register names and address from an XML memory map of the processor (as well as some other special registers that are not in the memory map but were found in documentation for older Blackfin processors). The grouped operations can be matched to the memory map to see what memory locations are being accessed.
 
@@ -101,7 +101,7 @@ We can then further simplify and group these operations into 'transactions'. Als
     </div>
 </div>
 
-Now we have something we can implement in our open source debugger! We are down from >500 entries of garbage to a few human readable operations. The debugger is executing opcodes directly on the processor to read some data and instruction cache status registers, and then passing the data back to itself via the EMUDAT register. Doing the same steps outlined above with the other necessary debugger operations allows us to make a complete debugger we can use for development.
+Now we have something we can implement in our open source debugger! We are down from >500 entries of garbage to a few human readable operations. The debugger is executing opcodes directly on the processor to read some data and instruction cache control registers, and then passing the data back to itself via the EMUDAT register. Doing the same steps outlined above with the other necessary debugger operations allows us to make a complete debugger we can use for development.
 
 The full example notebook for reverse engineering the JTAG traffic can be seen <a href="https://github.com/deanm1278/bfin-examples/blob/master/bfin-jtag-example.ipynb">here</a>.
 
@@ -175,7 +175,7 @@ I designed some hardware in various form factors to play around with for this pr
 
 ## Board support and other libraries
 
-I made various other things to use for development and exploration:
+I made various other tools and libraries to use for development and for some rudimentary DSP work:
 
 <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
   {% include repository/repo.html repository="deanm1278/audioFX" %}

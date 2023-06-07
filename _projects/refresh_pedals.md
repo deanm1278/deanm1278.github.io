@@ -13,9 +13,9 @@ category: work
     </div>
 </div>
 
-I worked as the firmware architect on this line of 6 high-end audio effects units. While the original releases of these units were designed around Analog Devices SHARC processors, these new versions have been re-designed from the ground up around an ARM Cortex M7 processor. I worked closely with the hardware team to spec out and decide on a system architecture, and then designed and implemented a robust, reliable, and extensible firmware architecture for use in this line and others that would follow.
+I worked as the firmware architect on this line of 6 high-end audio effects units. While the original releases of these units were designed around Analog Devices SHARC processors, these new versions have been re-designed from the ground up around an ARM Cortex M7 processor. I worked closely with the hardware team to spec out and decide on a system architecture and then designed and implemented a robust, reliable, and extensible firmware architecture for use in this line and others that would follow.
 
-These are best-in-class units and needed a system capable of delivering lot of audio processing horsepower while also being user friendly and packed with the features and conveniences to compete with any modern effects unit out there.
+These are best-in-class units and needed a system capable of delivering lots of audio processing horsepower while also being user friendly and packed with the features and conveniences to compete with any modern effects unit out there.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">

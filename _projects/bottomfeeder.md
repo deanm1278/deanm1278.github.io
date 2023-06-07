@@ -52,9 +52,9 @@ Looking back on it all now the design was .... bad, but it still made sound and 
     the PCB layout
 </div>
 
-The general architecture was an ARM Cortex-M0+ microcontroller would do the housekeeping tasks such as reading controls, receiving MIDI, LFO generation, CV generation, etc. and then would communicate with a Lattice ICE40 FPGA via SPI. This FPGA was handling the wavetable synthesis (likely with lots of aliasing) and outputting the 3 oscillators via some crude 16bit R2R DACs. The now analog audio would go through a voltage controlled filter (VCF) and then a voltage controlled amplifier (VCA).
+The general architecture was: an ARM Cortex-M0+ microcontroller would do the housekeeping tasks such as reading controls, receiving MIDI, LFO generation, CV generation, etc. and then would communicate with a Lattice ICE40 FPGA via SPI. This FPGA was handling the wavetable synthesis and outputting the 3 oscillators via some crude 16bit R2R DACs. The now analog ocillator audio would then be mixed together to go through a voltage controlled filter (VCF) and then a voltage controlled amplifier (VCA).
 
-The VCF was my own design and operated on a similar principle to VCFs that used LM13700 operational transconductance amplifiers. However, at the time I believed that I either didn't have enough PCB space or maybe that the needed DC-DC conversion for the LM13700 supply voltages would be too noisy. I designed this VCF and VCA that could be run from a +3.3V single supply.
+The VCF was my own design and operated on a similar principle to VCFs that used LM13700 operational transconductance amplifiers. However, at the time I believed that the DC-DC conversion for the LM13700 supply voltages would be too noisy (or maybe I just didn't have enough PCB space). I designed this VCF and VCA that could be run from a +3.3V single supply.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
@@ -62,7 +62,7 @@ The VCF was my own design and operated on a similar principle to VCFs that used 
     </div>
 </div>
 
-The FPGA is generally a very poor fit for this application as a simple microcontroller would have done a better job with far less effort, but part of the point was to learn some FPGA. A HDL called Chisel which was very new at the time was used to create the FPGA configuration.
+The FPGA is generally a very poor fit for this application as a simple microcontroller plus an external codec would have done a better job with far less effort and surface area, but part of the point was to learn some FPGA. A HDL called Chisel which was very new at the time was used to create the FPGA configuration.
 
 All-in-all this was an invaluable learning experience for me at the time. For a closer look at any of this stuff see the repo:
 
