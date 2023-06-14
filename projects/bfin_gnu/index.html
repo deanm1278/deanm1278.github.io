@@ -1,11 +1,325 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title>Blackfin+ GNU Toolchain and Debugger | Dean Miller</title> <meta name="author" content="Dean Miller"> <meta name="description" content="for ADI Blackfin+ fixed point DSP"> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous"> <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css"> <link rel="canonical" href="https://alshedivat.github.io/projects/bfin_gnu/"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark"> <script src="/assets/js/theme.js"></script> <script src="/assets/js/dark_mode.js"></script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Dean </span>Miller</a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about</a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects</a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fas fa-moon"></i> <i class="fas fa-sun"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5"> <div class="post"> <header class="post-header"> <h1 class="post-title">Blackfin+ GNU Toolchain and Debugger</h1> <p class="post-description">for ADI Blackfin+ fixed point DSP</p> </header> <article> <h4 id="2018">2018</h4> <p>ARM processors are everywhere these days, and it’s for good reason. They’re brilliantly powerful and cost-effective parts. But sometimes it can be fun and interesting to learn about some of the other types of processors that are out there. The Analog Devices Blackfin+ parts are fixed point DSP chips that sought to integrate more microcontroller-like features and peripherals to fill the space for applications that wanted both quick number crunching and modern microcontroller convenience in one package. These were very cool to me when I was looking to learn more about DSP on embedded systems and coming from Cortex M4 microcontrollers that were capable but still left you wanting more in terms of DSP performance.</p> <p>However, the only supported toolchain for these parts cost thousands of dollars per seat and was far outside my budget as someone who was not using this for commercial products. I took this as an opportunity to REALLY go from the ground up, starting with adding support for the part to the GCC compiler, and then everything in between on the way to creating some audio effects and synthesizers.</p> <p>In this writeup I’ll do a general overview of the pieces of this project. Repositories are posted for those who want to look deeper into any one part.</p> <p>Here are some videos of projects that I used my toolchain to make:</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <iframe width="100%" height="480" src="https://www.youtube.com/embed/4m1YorzgxkY" title="FM Synth Bass Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe> </div> </div> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <iframe width="100%" height="480" src="https://www.youtube.com/embed/Mct14THKZX8" title="blackfin fm synthesizer demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe> </div> </div> <h2 id="gcc-support">GCC Support</h2> <p>ADI previously supported a GCC toolchain for their Blackfin processors, but it was abandoned long before the Blackfin+ processors came about. Since the Blackfin+ instruction set is a superset of the original Blackfin instruction set, this ADI GCC fork seemed like a great place to start. GCC is massive and even being able to configure and build it from source is difficult. I will leave the details of the compiler modification for another possible writeup in the future and instead will just point to my GCC fork below for those interested in looking through the commits to see what needs to be done for this type of thing:</p> <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/blackfin-plus-gnu" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/blackfin-plus-gnu" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=blackfin-plus-gnu&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/blackfin-plus-gnu" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=blackfin-plus-gnu&amp;theme=dark&amp;show_owner=true"> </a> </div> </div> <h2 id="debug-support">Debug Support</h2> <p>If we’re going to develop for this processor we need to be able to do more than just write and compile code. We also need to be able to use a debug probe to step through code, read and write memory, and set breakpoints. This is a big ask on this processor because the Blackfin+ appears to have an entirely different debug port than previous blackfin processors. The reference manual says it integrates ARM Coresight IP, but everything about how debugging works under the hood is entirely undocumented. This means the debugging procedure had to be determined via reverse engineering.</p> <p>To reverse engineer the debug procedure I hooked up a logic analyzer to the JTAG port of a development board that could be debugged from the vendor tools (Cross Core Embedded Studio). This allows us to capture the JTAG signals that are sent and received by the probe when you do an action like reading memory or stepping over an instruction.</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_read.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> read memory with the vendor debugger </div> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_decode.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> export the captured debugger trace </div> <p>The exported data can then be imported into Python for analysis. At this point even the most simple action of reading one word of memory gives us a mess of over 500 JTAG events. Stepping over a line of code gives nearly 3000 events, and some operations give many more.</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_export.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> export the captured debugger trace </div> <p>Since the goal is to understand what the debug probe is doing enough to reimplement everything on our own, the data in it’s current form is useless. To clean the data up a bit we can re-implement the JTAG state machine in python and loop through the rows, grouping them into operations. This leaves us with 32 operations for our simplest case single word read.</p> <p>In order to better understand what’s going on we can also try to import and parse out register names and address from an XML memory map of the processor (as well as some other special registers that are not in the memory map but were found in documentation for older Blackfin processors). The grouped operations can be matched to the memory map to see what memory locations are being accessed.</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_xml.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> memory mapped registers parsed from the map </div> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_join.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> grouped operations joined against the memory map </div> <p>We can then further simplify and group these operations into ‘transactions’. Also, since I had just been implementing the opcodes in the compiler portion of this project, I noticed that a lot of the data being sent to the processor looked suspiciously similar. Disassembling these opcodes and parsing the transactions shows pretty clearly what’s going on in our memory read.</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/bfin_txn.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <p>Now we have something we can implement in our open source debugger! We are down from &gt;500 entries of garbage to a few human readable operations. The debugger is executing opcodes directly on the processor to read some data and instruction cache control registers, and then passing the data back to itself via the EMUDAT register. Doing the same steps outlined above with the other necessary debugger operations allows us to make a complete debugger we can use for development.</p> <p>The full example notebook for reverse engineering the JTAG traffic can be seen <a href="https://github.com/deanm1278/bfin-examples/blob/master/bfin-jtag-example.ipynb" rel="external nofollow noopener" target="_blank">here</a>.</p> <p>The OpenOCD fork with added Blackfin+ support is located here:</p> <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/openocd" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/openocd" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=openocd&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/openocd" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=openocd&amp;theme=dark&amp;show_owner=true"> </a> </div> </div> <h2 id="header-file-generation">Header File Generation</h2> <p>We can now compile, load, and debug code, but we have no drivers of any kind to make use of the on-chip resources. In fact, our build system really has no concept of where anything is on the chip at this point. Since it’s impractical to be manually cross-referencing the manual for raw addresses, we want header files that define the memory mapped registers. These can be generated from an XML file detailing the memory map of the chip. I chose to use a format similar to the ARM CMSIS header files, so the goal is to turn somthing that looks like this:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;register name="L1DM_DCTL"                       read-address="0x1FC00004" write-address="0x1FC00004" bit-size="32" type="IO" mask="FFFFFFFF" group="L1DM" description="L1DM Data Memory Control Register" /&gt;
+<!DOCTYPE html>
+<html lang="en">
+
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blackfin+ GNU Toolchain and Debugger | Dean  Miller</title>
+    <meta name="author" content="Dean  Miller">
+    <meta name="description" content="for ADI Blackfin+ fixed point DSP">
+    <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Bootstrap Table -->
+    <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://alshedivat.github.io/projects/bfin_gnu/">
+
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Dean </span>Miller</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="container mt-5">
+      
+        <!-- page.html -->
+        <div class="post">
+
+          <header class="post-header">
+            <h1 class="post-title">Blackfin+ GNU Toolchain and Debugger</h1>
+            <p class="post-description">for ADI Blackfin+ fixed point DSP</p>
+          </header>
+
+          <article>
+            <h4 id="2018">2018</h4>
+
+<p>ARM processors are everywhere these days, and it’s for good reason. They’re brilliantly powerful and cost-effective parts. But sometimes it can be fun and interesting to learn about some of the other types of processors that are out there. The Analog Devices Blackfin+ parts are fixed point DSP chips that sought to integrate more microcontroller-like features and peripherals to fill the space for applications that wanted both quick number crunching and modern microcontroller convenience in one package. These were very cool to me when I was looking to learn more about DSP on embedded systems and coming from Cortex M4 microcontrollers that were capable but still left you wanting more in terms of DSP performance.</p>
+
+<p>However, the only supported toolchain for these parts cost thousands of dollars per seat and was far outside my budget as someone who was not using this for commercial products. I took this as an opportunity to REALLY go from the ground up, starting with adding support for the part to the GCC compiler, and then everything in between on the way to creating some audio effects and synthesizers.</p>
+
+<p>In this writeup I’ll do a general overview of the pieces of this project. Repositories are posted for those who want to look deeper into any one part.</p>
+
+<p>Here are some videos of projects that I used my toolchain to make:</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <iframe width="100%" height="480" src="https://www.youtube.com/embed/4m1YorzgxkY" title="FM Synth Bass Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <iframe width="100%" height="480" src="https://www.youtube.com/embed/Mct14THKZX8" title="blackfin fm synthesizer demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+    </div>
+</div>
+
+<h2 id="gcc-support">GCC Support</h2>
+
+<p>ADI previously supported a GCC toolchain for their Blackfin processors, but it was abandoned long before the Blackfin+ processors came about. Since the Blackfin+ instruction set is a superset of the original Blackfin instruction set, this ADI GCC fork seemed like a great place to start. GCC is massive and even being able to configure and build it from source is difficult. I will leave the details of the compiler modification for another possible writeup in the future and instead will just point to my GCC fork below for those interested in looking through the commits to see what needs to be done for this type of thing:</p>
+
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/blackfin-plus-gnu" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/blackfin-plus-gnu" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=blackfin-plus-gnu&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/blackfin-plus-gnu" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=blackfin-plus-gnu&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+</div>
+
+<h2 id="debug-support">Debug Support</h2>
+
+<p>If we’re going to develop for this processor we need to be able to do more than just write and compile code. We also need to be able to use a debug probe to step through code, read and write memory, and set breakpoints. This is a big ask on this processor because the Blackfin+ appears to have an entirely different debug port than previous blackfin processors. The reference manual says it integrates ARM Coresight IP, but everything about how debugging works under the hood is entirely undocumented. This means the debugging procedure had to be determined via reverse engineering.</p>
+
+<p>To reverse engineer the debug procedure I hooked up a logic analyzer to the JTAG port of a development board that could be debugged from the vendor tools (Cross Core Embedded Studio). This allows us to capture the JTAG signals that are sent and received by the probe when you do an action like reading memory or stepping over an instruction.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_read.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    read memory with the vendor debugger
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_decode.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    export the captured debugger trace
+</div>
+
+<p>The exported data can then be imported into Python for analysis. At this point even the most simple action of reading one word of memory gives us a mess of over 500 JTAG events. Stepping over a line of code gives nearly 3000 events, and some operations give many more.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_export.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    export the captured debugger trace
+</div>
+
+<p>Since the goal is to understand what the debug probe is doing enough to reimplement everything on our own, the data in it’s current form is useless. To clean the data up a bit we can re-implement the JTAG state machine in python and loop through the rows, grouping them into operations. This leaves us with 32 operations for our simplest case single word read.</p>
+
+<p>In order to better understand what’s going on we can also try to import and parse out register names and address from an XML memory map of the processor (as well as some other special registers that are not in the memory map but were found in documentation for older Blackfin processors). The grouped operations can be matched to the memory map to see what memory locations are being accessed.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_xml.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    memory mapped registers parsed from the map
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_join.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    grouped operations joined against the memory map
+</div>
+
+<p>We can then further simplify and group these operations into ‘transactions’. Also, since I had just been implementing the opcodes in the compiler portion of this project, I noticed that a lot of the data being sent to the processor looked suspiciously similar. Disassembling these opcodes and parsing the transactions shows pretty clearly what’s going on in our memory read.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/bfin_txn.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<p>Now we have something we can implement in our open source debugger! We are down from &gt;500 entries of garbage to a few human readable operations. The debugger is executing opcodes directly on the processor to read some data and instruction cache control registers, and then passing the data back to itself via the EMUDAT register. Doing the same steps outlined above with the other necessary debugger operations allows us to make a complete debugger we can use for development.</p>
+
+<p>The full example notebook for reverse engineering the JTAG traffic can be seen <a href="https://github.com/deanm1278/bfin-examples/blob/master/bfin-jtag-example.ipynb" rel="external nofollow noopener" target="_blank">here</a>.</p>
+
+<p>The OpenOCD fork with added Blackfin+ support is located here:</p>
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/openocd" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/openocd" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=openocd&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/openocd" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=openocd&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+</div>
+
+<h2 id="header-file-generation">Header File Generation</h2>
+
+<p>We can now compile, load, and debug code, but we have no drivers of any kind to make use of the on-chip resources. In fact, our build system really has no concept of where anything is on the chip at this point. Since it’s impractical to be manually cross-referencing the manual for raw addresses, we want header files that define the memory mapped registers. These can be generated from an XML file detailing the memory map of the chip. I chose to use a format similar to the ARM CMSIS header files, so the goal is to turn somthing that looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;register name="L1DM_DCTL"                       read-address="0x1FC00004" write-address="0x1FC00004" bit-size="32" type="IO" mask="FFFFFFFF" group="L1DM" description="L1DM Data Memory Control Register" /&gt;
    &lt;register name="L1DM_DCTL.ENX"                parent="L1DM_DCTL" bit-position="16" bit-size="1" description="Enable Extended Data Access" /&gt;
    &lt;register name="L1DM_DCTL.RDCHK"              parent="L1DM_DCTL" bit-position="9" bit-size="1" description="Read Parity Check" /&gt;
    &lt;register name="L1DM_DCTL.CBYPASS"            parent="L1DM_DCTL" bit-position="8" bit-size="1" description="Cache Bypass" /&gt;
    &lt;register name="L1DM_DCTL.DCBS"               parent="L1DM_DCTL" bit-position="4" bit-size="1" description="Data Cache Bank Select" /&gt;
    &lt;register name="L1DM_DCTL.CFG"                parent="L1DM_DCTL" bit-position="2" bit-size="2" description="Configure as Cache or SRAM" /&gt;
    &lt;register name="L1DM_DCTL.ENCPLB"             parent="L1DM_DCTL" bit-position="1" bit-size="1" description="Enable CPLB Operations" /&gt;
-</code></pre></div></div> <p>into something that can be understood by the GCC compiler:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#if !(defined(__ASSEMBLY__))
+</code></pre></div></div>
+
+<p>into something that can be understood by the GCC compiler:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#if !(defined(__ASSEMBLY__))
 /* ----- L1DM_DCTL : (32) L1DM Data Memory Control Register ----- */
 typedef union {
 	struct {
@@ -27,4 +341,263 @@ typedef union {
 #else
 #define REG_L1DM_DCTL		(0x1FC00004) /**&lt; \brief (L1DM) L1DM Data Memory Control Register */
 #endif
-</code></pre></div></div> <p>This is very straightforward and the python code and resulting header file can be found here:</p> <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/bfin-CMSIS" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/bfin-CMSIS" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-CMSIS&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/bfin-CMSIS" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-CMSIS&amp;theme=dark&amp;show_owner=true"> </a> </div> </div> <h2 id="hardware">Hardware</h2> <p>I designed some hardware in various form factors to play around with for this project. In general the design had the Blackfin+ chip and an Atmel SAMD21 microcontroller to act as a USB bridge and to facilitate the process of booting and flashing the board (Blackfin+ chips do not have onboard flash).</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/IMG_E3540.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/IMG_E3541.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <img src="/assets/img/IMG_E3542.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> </div> <div class="caption"> Left: Arduino-style dev board with stereo audio codec. Middle: small form factor board. Right: guitar pedal board with potentiometers, relays, codec, etc. </div> <h2 id="board-support-and-other-libraries">Board support and other libraries</h2> <p>I made various other tools and libraries to use for development and for some rudimentary DSP work:</p> <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/audioFX" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/audioFX" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=audioFX&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/audioFX" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=audioFX&amp;theme=dark&amp;show_owner=true"> </a> </div> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/ArduinoCore-blackfin" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/ArduinoCore-blackfin" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=ArduinoCore-blackfin&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/ArduinoCore-blackfin" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=ArduinoCore-blackfin&amp;theme=dark&amp;show_owner=true"> </a> </div> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/bfin-scheduler" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/bfin-scheduler" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-scheduler&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/bfin-scheduler" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-scheduler&amp;theme=dark&amp;show_owner=true"> </a> </div> <div class="repo p-2 text-center"> <a href="https://github.com/deanm1278/bfin-fm" rel="external nofollow noopener" target="_blank"> <img class="repo-img-light w-100" alt="deanm1278/bfin-fm" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-fm&amp;theme=default&amp;show_owner=true"> <img class="repo-img-dark w-100" alt="deanm1278/bfin-fm" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-fm&amp;theme=dark&amp;show_owner=true"> </a> </div> </div> <h2 id="conclusion">Conclusion</h2> <p>I hope you enjoyed this brief overview of these projects. It was a great learning experience to touch on virtually every level of the system from the compiler through to the linker, image generation, gdb and disassembly, debugging and OpenOCD, programming and boot process, peripheral drivers, scheduling and context switching, physical hardware, etc… all the way to the DSP and creating some fun and compelling end musical applications.</p> </article> </div> </div> <footer class="fixed-bottom"> <div class="container mt-0"> © Copyright 2023 Dean Miller. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js"></script> <script defer src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script> <script src="/assets/js/no_defer.js"></script> <script defer src="/assets/js/common.js"></script> <script defer src="/assets/js/copy_code.js" type="text/javascript"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script> <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> </body> </html>
+</code></pre></div></div>
+<p>This is very straightforward and the python code and resulting header file can be found here:</p>
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/bfin-CMSIS" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/bfin-CMSIS" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-CMSIS&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/bfin-CMSIS" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-CMSIS&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+</div>
+
+<h2 id="hardware">Hardware</h2>
+
+<p>I designed some hardware in various form factors to play around with for this project. In general the design had the Blackfin+ chip and an Atmel SAMD21 microcontroller to act as a USB bridge and to facilitate the process of booting and flashing the board (Blackfin+ chips do not have onboard flash).</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/IMG_E3540.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/IMG_E3541.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/IMG_E3542.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Left: Arduino-style dev board with stereo audio codec. Middle: small form factor board. Right: guitar pedal board with potentiometers, relays, codec, etc.
+</div>
+
+<h2 id="board-support-and-other-libraries">Board support and other libraries</h2>
+
+<p>I made various other tools and libraries to use for development and for some rudimentary DSP work:</p>
+
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/audioFX" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/audioFX" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=audioFX&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/audioFX" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=audioFX&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/ArduinoCore-blackfin" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/ArduinoCore-blackfin" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=ArduinoCore-blackfin&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/ArduinoCore-blackfin" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=ArduinoCore-blackfin&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/bfin-scheduler" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/bfin-scheduler" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-scheduler&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/bfin-scheduler" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-scheduler&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+  
+
+
+
+<div class="repo p-2 text-center">
+  <a href="https://github.com/deanm1278/bfin-fm" rel="external nofollow noopener" target="_blank">
+    <img class="repo-img-light w-100" alt="deanm1278/bfin-fm" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-fm&amp;theme=default&amp;show_owner=true">
+    <img class="repo-img-dark w-100" alt="deanm1278/bfin-fm" src="https://github-readme-stats.vercel.app/api/pin/?username=deanm1278&amp;repo=bfin-fm&amp;theme=dark&amp;show_owner=true">
+  </a>
+</div>
+
+</div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I hope you enjoyed this brief overview of these projects. It was a great learning experience to touch on virtually every level of the system from the compiler through to the linker, image generation, gdb and disassembly, debugging and OpenOCD, programming and boot process, peripheral drivers, scheduling and context switching, physical hardware, etc… all the way to the DSP and creating some fun and compelling end musical applications.</p>
+
+          </article>
+
+        </div>
+
+      
+    </div>
+
+    <!-- Footer -->    
+    <footer class="fixed-bottom">
+      <div class="container mt-0">
+        © Copyright 2023 Dean  Miller. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>.
+
+      </div>
+    </footer>
+
+    <!-- JavaScripts -->
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script defer src="/assets/js/masonry.js" type="text/javascript"></script>
+    
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js"></script>
+
+  <!-- Bootstrap Table -->
+  <script defer src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
+
+  <!-- Load Common JS -->
+  <script src="/assets/js/no_defer.js"></script>
+  <script defer src="/assets/js/common.js"></script>
+  <script defer src="/assets/js/copy_code.js" type="text/javascript"></script>
+
+    
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  </body>
+</html>
