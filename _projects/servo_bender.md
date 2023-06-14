@@ -65,7 +65,7 @@ To get the required positional feedback from the motors an encoder assembly need
 
 ## Mechanical Design
 
-I opted to use the threads for the prop on the drone motors as a sort of lead screw. This helped to make the design less complex and avoid having to use gears. Each string bender servo actuates a lever which rotates around a hardened steel axle. The end of the guitar string is anchored around the lever, and this serves to increase or decrease the tension of the string. The top of the lever attaches to an extension spring which is adjusted to counterbalance the tension of the guitar string. This helps to reduce the load on the motors as well as reduce binding in the mechanical parts.
+I opted to use the threads for the prop on the drone motors as a sort of lead screw. This helped to make the design less complex and avoid having to use gears. Additionally, the lead screw design allows for the motors to require zero holding torque since all of the force is on the face of the threads. This greatly reduces noise and allows for long battery life since the motors and drivers can be shut down once the desired tuning is reached. Each string bender servo actuates a lever which rotates around a hardened steel axle. The end of the guitar string is anchored around the lever, and this serves to increase or decrease the tension of the string. The top of the lever attaches to an extension spring which is adjusted to counterbalance the tension of the guitar string. This helps to reduce the load on the motors as well as reduce binding in the mechanical parts.
 
 The Lever assembly was designed around off-the-shelf hardware where possible and was 3D printed out of steel.
 
