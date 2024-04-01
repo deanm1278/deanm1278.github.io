@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Strymon V2 Pedals
-description: re-designed and updated
+description: Firmware Architect
 img: assets/img/strymon-v2.jpg
 importance: 2
 category: work

@@ -6,6 +6,7 @@
 
   <video
     src="{{ include.path | relative_url }}"
+    preload="auto"
     {% if include.class %}class="{{ include.class }}"{% endif %}
     {% if include.width %}width="{{ include.width }}"{% else %}width="auto"{% endif %}
     {% if include.height %}height="{{ include.height }}"{% else %}height="auto"{% endif %}

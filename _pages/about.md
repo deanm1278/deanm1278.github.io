@@ -16,4 +16,5 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false  # includes social icons at the bottom of the page
 ---
 
-TODO:
+I am an embedded engineer currently specializing in audio products and DSP. 
+See the projects tab for an overview of some things I've worked on.

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Strymon Cloudburst
-description: audio effects unit
+description: Firmware Architect and DSP Engineer
 img: assets/img/cloudburst.jpg
 importance: 1
 category: work
@@ -13,7 +13,9 @@ category: work
     </div>
 </div>
 
-I worked as a firmware and DSP engineer for this audio effects unit. It extends the architecture developed for the Strymon V2 pedals and also features a novel pitch/timbre algorithm of my own design called the 'Ensemble' algorithm.
+I worked as firmware architect and DSP engineer for this audio effects unit. It extends the architecture developed for the Strymon V2 pedals and also features a novel pitch/timbre algorithm of my own design called the 'Ensemble' algorithm.
+
+Cloudburst was released in 2023 and received a very positive reception. It was nominated for a NAMM TEC award and was named the best-selling pedal that was released in 2023 by Reverb.com.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
