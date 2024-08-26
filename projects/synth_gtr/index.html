@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>projects | Dean  Miller</title>
+    <title>Synth Guitar | Dean  Miller</title>
     <meta name="author" content="Dean  Miller">
-    <meta name="description" content="what I've been working on">
+    <meta name="description" content="a guitar-shaped synthesizer">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -38,7 +38,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://alshedivat.github.io/projects/">
+    <link rel="canonical" href="https://alshedivat.github.io/projects/synth_gtr/">
 
     <!-- Dark Mode -->
     
@@ -78,8 +78,8 @@
               
 
               <!-- Other pages -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/projects/">projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
               </li>
 
               <!-- Toogle theme mode -->
@@ -110,283 +110,301 @@
         <div class="post">
 
           <header class="post-header">
-            <h1 class="post-title">projects</h1>
-            <p class="post-description">what I've been working on</p>
+            <h1 class="post-title">Synth Guitar</h1>
+            <p class="post-description">a guitar-shaped synthesizer</p>
           </header>
 
           <article>
-            <!-- pages/projects.md -->
-<div class="projects">
-  <!-- Display categorized projects -->
-  <h2 class="category">work</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/bigsky/">
-      <div class="card hoverable">
-<figure>
+            <h4 id="ongoing">Ongoing</h4>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/bigsky.jpeg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_2805.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Strymon BigSky MX</h2>
-          <p class="card-text">Sound Design, DSP, Firmware Architect</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/cloudburst/">
-      <div class="card hoverable">
-<figure>
+<div class="caption">
+    the current prototype
+</div>
+
+<p>This is a currently ongoing project with the goal of making the guitar-shaped synthesizer I’ve always wanted. There have been many guitar synths and MIDI controllers over the years but I think there’s always room for one more.</p>
+
+<p>In my opinion there is a lot about the concept of “a guitar that sounds like a piano” or “a guitar that triggers whatever synthesizer you want” that doesn’t quite work. The goal for this one is to make an instrument that’s entirely it’s own thing and matches the guitar’s ability to respond to very fine changes in the players technique.</p>
+
+<p>The general system design is shown below. A microcontroller receives control input from fretboard sensors, load cell tension sensors, and optical string trigger/displacement sensors. The microcontroller board is connected via a USB cable to an embedded Linux host (this also supplies power).</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/cloudburst.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_4727.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Strymon Cloudburst</h2>
-          <p class="card-text">Firmware Architect and DSP Engineer</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/refresh_pedals/">
-      <div class="card hoverable">
-<figure>
+
+<h2 id="tension-sensor">Tension Sensor</h2>
+
+<p>The naturalness and responsiveness will be achieved by adding a tension sensor to each string in the form of a load cell. These type of strain gauge load cells are widely available and are very common in commercial weigh scales. The load cells used are rated at 750g so only a very small component of the string tension can be transferred to the load cell.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/strymon-v2.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/4630-03.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Strymon V2 Pedals</h2>
-          <p class="card-text">Firmware Architect</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/brig_uv/">
-      <div class="card hoverable">
-<figure>
+<div class="caption">
+    A small strain gauge load cell (photo courtesy of Adafruit)
+</div>
+
+<p>The tension head and other hardware in the tension sensor assembly are 3D printed out of stainless steel. Plastic parts flex too much under the stress of the strings and create cross coupling between different sensors.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/strymon_1fs.png" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/tension_asm3.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Strymon Compact Pedals</h2>
-          <p class="card-text">Firmware Architect</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/adafruit/">
-      <div class="card hoverable">
-<figure>
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/neotrellis.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_2800.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Adafruit Products</h2>
-          <p class="card-text">BSP, Code Libraries, PCB design</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-  </div>
-  <h2 class="category">fun</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/servo_bender/">
-      <div class="card hoverable">
-<figure>
+<div class="caption">
+    Left: rendering of tension assembly. Right: current prototype.
+</div>
+
+<p>The amplifier for the load cell uses an AD8426 instrumentation amplifier into a MAX7427 5th order lowpass filter, and then an amplifier with adjustable offset to place the signal in the desired range for the microcontroller ADC.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/bender_cover.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/loadamp.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Electronic String Bender Guitar</h2>
-          <p class="card-text">wireless string bender powered by 4 brushless servos</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/synth_gtr/">
-      <div class="card hoverable">
-<figure>
+
+<p>The microcontroller samples at 5.2kHz and then downsamples by 2 before sending to the host. The high sample rate for the tension sensor will allow us to detect fast changes in tension and infer pull-off technique.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/IMG_2805.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/mainboard.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Synth Guitar</h2>
-          <p class="card-text">a guitar-shaped synthesizer</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/bfin_gnu/">
-      <div class="card hoverable">
-<figure>
+<div class="caption">
+    The mainboard for the guitar.
+</div>
+
+<h2 id="fretboard-assembly">Fretboard Assembly</h2>
+
+<p>We also need to know which fret the player is touching on the guitar. The neck has 21 frets, with each fret divided into 6 slices for a total of 126 sensors. Because a fretboard like this would be prohibitively expensive to prototype for a project like this I have adapted one from an old MIDI guitar.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/IMG_3539.JPG" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_4270.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Blackfin+ GNU Toolchain and Debugger</h2>
-          <p class="card-text">for ADI Blackfin+ fixed point DSP</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/zynq_led/">
-      <div class="card hoverable">
-<figure>
+<div class="caption">
+    The MIDI guitar the neck was adapted from.
+</div>
+
+<p>It would have been nice to be able to use the fretboard as-is, so I reverse engineered the protocol it used. However it ended up being too slow and ‘careful’. It seems to have been designed to give a stable, debounced fret number reading (as you would need for a MIDI guitar). For this instrument we really just want all the data as fast as possible so I instead opted to design replacement circuitry to fit the same mechanical footprint but that would behave as desired for this application.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/led-wall.gif" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_4380.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Music Reactive FPGA LED strip controller</h2>
-          <p class="card-text">for controlling lots of RGB LEDs</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/bottomfeeder/">
-      <div class="card hoverable">
-<figure>
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
 
   <picture>
     
 
     <!-- Fallback to the original file -->
-    <img src="/assets/img/synth.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+    <img src="/assets/img/IMG_4410.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
 
   </picture>
 
 </figure>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">Tiny Analog/Digital Synthesizer</h2>
-          <p class="card-text">with an FPGA?</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+    </div>
 </div>
-  </div>
+<div class="caption">
+    Left: original neck circuitry. Right: replacement neck circuitry.
 </div>
+
+<p>I decided to be cost consicious on this so 4 extremely inexpensive microcontrollers are used that all run identical firmware and pipe their readings down to the next one in line, and then finally to the more powerful main microcontroller on the guitar main board.</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/neck1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/neck2.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/neck3.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    The replacement neck circuit boards.
+</div>
+
+<p>Note that in designs like this it’s typical to multiplex all the different switches because it allows you to use far less GPIO pins. However that would require each string to be electrically isolated, creating a major headache for the mechanicals. Instead each fret division is connected to it’s own microcontroller pin.</p>
+
+<h2 id="optical-trigger">Optical Trigger</h2>
+
+<p>We also need to sense when the player hits or touches the strings with their picking hand. For this we will use photointerruptors mounted near the bridge. The string sits in the slot between the LED and the phototransistor. This allows us to sense not only vibration (like a magnetic pickup can) but also absolute displacement from muting the string.</p>
+
+<p>The signal from the phototransistors undergoes some lowpass filtering and scaling to place it in the range of the microcontroller ADC. It is sampled at a rate of 5.2kHz and downsampled by 2 before sending to the host.</p>
+
+<h2 id="linux-host">Linux Host</h2>
+
+<p>The guitar enumerates as a USB CDC device to an embedded Linux host (currently I’m using a Nvidia Jetson nano) and sends raw sensor data. The use of an embedded Linux device makes it easy to collect telemetry data from the controller and develop the needed signal processing routines for converting the sensor data into sound, and also provides more than enough horsepower for whatever audio generation we choose. Here’s a simple real time dashboard for printing the sensor data:</p>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/gtt_monitor.gif" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<h2 id="next-processing-the-sensor-data">Next: Processing the sensor data</h2>
 
           </article>
 
