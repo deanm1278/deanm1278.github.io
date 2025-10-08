@@ -3,7 +3,7 @@ layout: page
 title: Strymon Compact Pedals
 description: Firmware Architect
 img: assets/img/strymon_1fs.png
-importance: 3
+importance: 4
 category: work
 ---
 
